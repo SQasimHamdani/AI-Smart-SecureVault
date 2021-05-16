@@ -1,0 +1,65 @@
+{% extends 'Accounts/layout.html'%}
+{% load static %}
+
+{% block title %}
+SecureVault
+{% endblock%}
+
+{% block css %}
+{% endblock%}
+
+{% block content %}
+<section id="hero" class="d-flex align-items-center">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 d-flex flex-column justify-content-center pt-4  pt-lg-0 order-2 order-lg-1"
+                data-aos="fade-up" data-aos-delay="200">
+
+                <h1>Administrator</h1>
+                {% if message %}
+                {% if "Success" in message %}
+                <div class="alert alert-success" role="alert">{{message}}</div>
+                {% elif "Error" in message %}
+                <div class="alert alert-danger" role="alert">{{message}}</div>
+                {% endif %}
+                {% endif %}
+                <section id="contact" class="contact">
+                    <div class="container" data-aos="fade-up">
+                        <div class="col-lg-8 mt-5 mt-lg-0 d-flex align-items-stretch">
+
+                            <form action="" method="post" role="form" class="php-email-form">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="name">Username</label>
+                                    <input type="text" class="form-control" name="username" id="username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Password</label>
+                                    <input type="password" class="form-control" name="password" id="password" required>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit">Login</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
+                <img src="{% static 'img/hero-img.png' %}" class="img-fluid animated" alt="">
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+
+{% endblock%}
+
+
+{% block js %}
+{% endblock%}

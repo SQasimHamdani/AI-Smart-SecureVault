@@ -7,9 +7,8 @@ from django.contrib.auth.models import User
 class Manager(models.Model):
     user_profile  = models.OneToOneField(User, on_delete=models.CASCADE)
     name    = models.CharField(max_length = 50)
-    email   = models.EmailField(unique=True)
-    address = models.CharField(max_length = 100)
-    phone   = models.CharField(max_length = 15)
+    address = models.CharField(max_length = 300)
+    phone   = models.CharField(max_length = 20)
     
     # username = models.CharField(max_length = 100, null=True, unique=True)
     # email   = models.EmailField(null=True, default="")

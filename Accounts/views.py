@@ -2,7 +2,6 @@ from os import name
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
-# Create your views he
 
 
 from django.contrib.auth.models import User
@@ -32,7 +31,7 @@ def admin_login(request):
         if request.user.is_staff:
             return HttpResponseRedirect('admin')
         else:
-            return render(request, 'Accounts/manager_login.html')
+            return HttpResponseRedirect('manager_login')
     
 
     if request.method == "POST":
@@ -110,82 +109,66 @@ def manager_login(request):
     return render(request, 'Accounts/manager_login.html', context)
 
 def manager_register(request):
-    
+    if request.user.is_authenticated:
+        # print('already logged in')
+        return HttpResponseRedirect('step1')
+    message=" "
     if request.method == "POST":
         print('this is a POST Request')
-        name = request.POST.get('name')
-        address = request.POST.get('address')
-        phone = request.POST.get('phone')
 
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        username = request.POST.get('Username')
+        password = request.POST.get('Password')
+        email = request.POST.get('Email')
+
+        name = request.POST.get('Name')
+        address = request.POST.get('Address')
+        phone = request.POST.get('Phone')
 
 
-        print(request.POST.get('name'))
-        print(request.POST.get('address'))
-        print(request.POST.get('phone'))
-        print(request.POST.get('username'))
-        print(request.POST.get('email'))
-        print(request.POST.get('password'))
-        print(request.POST.get('works_at_showroom'))
+        print(request.POST.get('Username'))
+        print(request.POST.get('Password'))
+        print(request.POST.get('Email'))
 
+        print(request.POST.get('Name'))
+        print(request.POST.get('Address'))
+        print(request.POST.get('Phone'))
+        
         try:
             user = User.objects.create_user(username = username, password = password, email = email)
             user.name = name
             user.save()
+            print("Success user")
+            message = "Success - user"
+            created_user = user
         except:
-            print("Error when creating user")
-            context = {
-                "title" : "register",
-                "message" : "Error when creating user",
-            }
-            return render(request, 'Accounts/manager_register.html', context)
-        
+            print("Error when creating User")
+            message = "Error when creating User"
+        created_user = User.objects.filter(username = username)[0]
+        # print(created_user)
         try:
-            person = Person(  
-                            # username = username, 
-                            # password = password, 
-                            # email = email,
-                            person = user,
+            Managerr = Manager(
+                            user_profile = created_user,
                             name = name,
                             address = address,
-                            phone = phone,
+                            phone = phone
                             )
-            person.save()
+            # print(Managerr,"managerr")
+
+            Managerr.save()
+            print("Success Manager")
+            message = "Success - Manager Account Created"
+            user = authenticate(request, username=username, password=password)
+            auth.login(request, user)
         except:
-            print("Error when creating Person")
-            context = {
-                "title" : "register",
-                "message" : "Error when creating Person",
-            }
-            return render(request, 'Accounts/manager_register.html', context)
-            
+            print("Error when creating Manager")
+            message =  "Error when creating Manager"
 
-        try:
-            customer = Customer(customer = person)
-            customer.save()
-        except:
-            print("Error when creating customer")
-            context = {
-                "title" : "register",
-                "message" : "Error when creating customer",
-            }
-            return render(request, 'Accounts/manager_register.html', context)
-        
-        print("Success")
-        context = {
-            "title" : "register",
-            "message" : "Success",
-        }
-        return render(request, 'Accounts/manager_register.html', context)
+    context = {
+        "title" : "register",
+        "message" : message,
+    }
 
-    else:
-        context = {
-            "title" : "register",
-        }
-
-        return render(request,'Accounts/manager_register.html', context)
+    return render(request,'Accounts/manager_register.html', context)
 
 def manager_signout(request):
     logout(request)

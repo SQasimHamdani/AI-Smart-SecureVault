@@ -4,6 +4,7 @@
 
 This App is developed for Smartly Accessing the Vault authorized by Artificial Intelligence and Computer Vision
 
+
 ![Homeage](./static/screenshot_1_homepage.jpg)
 
 ## Installation

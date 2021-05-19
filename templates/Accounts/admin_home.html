@@ -1,0 +1,91 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Admin Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="{% static 'custom_admin/css/style.css' %}">
+
+</head>
+
+<body>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h2 class="heading-section">Administrator Panel</h2>
+                </div>
+
+
+            </div>
+            <a class="btn btn-primary" href="{% url 'admin_managers_login_view' %}">admin_managers_login_view</a>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-wrap">
+                        <table class="table table-responsive-xl">
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Status</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for manager in managers %}
+                                <h1></h1>
+
+                                <tr class="alert" role="alert">
+                                    <td>
+                                        <label class="checkbox-wrap checkbox-primary">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </td>
+                                    <td>{{ manager.name }}</td>
+                                    <td class="d-flex align-items-center">
+                                        <div class="img" style="background-image: url(images/person_1.jpg);"></div>
+                                        <div class="pl-3 email">
+                                            <span>{{ manager.user_profile.email }}</span>
+                                            <span>Added: {{ manager.user_profile.date_joined }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ manager.user_profile.username }}</td>
+                                    {% if manager.user_profile.is_active %}
+                                    <td class="status"><span class="active">Active</span></td>
+                                    {%else%}
+                                    <td class="status"><span class="waiting">Non Active</span></td>
+                                    {%endif%}
+                                    <td>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true"><i class="fa fa-close"></i></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="{% static 'custom_admin/js/jquery.min.js' %}"></script>
+    <script src="{% static 'custom_admin/js/popper.js' %}"></script>
+    <script src="{% static 'custom_admin/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'custom_admin/js/main.js' %}"></script>
+
+</body>
+
+</html>

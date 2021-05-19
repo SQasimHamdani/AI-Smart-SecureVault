@@ -8,30 +8,31 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib import auth
 from django.contrib.auth import logout
-from .models import Manager
+from .models import Manager, ManagersLogin
 
 def get_username(request):
     if request.user.is_authenticated:
-        username = Manager.objects.filter(user_profile=request.user.id)[0]
+        username = User.objects.filter(id=request.user.id)[0]
     else:
         username=" "
     
     return username
 
 def home(request):
-    username = get_username(request)
-    context ={
-        "username" : username,
-    }
-    return render(request, 'Accounts/index.html', context)
+    # username = get_username(request)
+    # context ={
+    #     "username" : username,
+    # }
+    # return render(request, 'Accounts/index.html', context)
+    return render(request, 'Accounts/index.html')
 
 def admin_login(request):
     if request.user.is_authenticated:
         
         if request.user.is_staff:
-            return HttpResponseRedirect('admin')
+            return HttpResponseRedirect('admin_home')
         else:
-            return HttpResponseRedirect('manager_login')
+            return HttpResponseRedirect('step1')
     
 
     if request.method == "POST":
@@ -61,7 +62,7 @@ def admin_login(request):
         "username" : username,
     }
     if message=="Success":
-        return HttpResponseRedirect("admin", context )
+        return HttpResponseRedirect("admin_home", context )
     
     return render(request, 'Accounts/admin_login.html', context)
 
@@ -69,6 +70,27 @@ def admin_signout(request):
     logout(request)
     return redirect('admin_login')
 
+def admin_home(request):
+    managers = Manager.objects.all()
+    message = " "
+    context = {
+        "message" : message,
+        "managers" : managers,
+        # "username" : username,
+    }
+    return render(request, 'Accounts/admin_home.html', context)
+
+def admin_managers_login_view(request):
+    managers = ManagersLogin.objects.all()
+    message = " "
+    context = {
+        "message" : message,
+        "managers" : managers,
+        # "username" : username,
+    }
+    return render(request, 'Accounts/admin_managers_login_view.html', context)
+
+"""
 def manager_login(request):
     if request.user.is_authenticated:
         # print('already logged in')
@@ -107,7 +129,9 @@ def manager_login(request):
         return HttpResponseRedirect("step1", context )
     
     return render(request, 'Accounts/manager_login.html', context)
+"""
 
+"""
 def manager_register(request):
     if request.user.is_authenticated:
         # print('already logged in')
@@ -169,46 +193,53 @@ def manager_register(request):
     }
 
     return render(request,'Accounts/manager_register.html', context)
+"""
 
+"""
 def manager_signout(request):
     logout(request)
     return redirect('manager_login')
+"""
 
 def step1(request):
-    if not request.user.is_authenticated:
+    # if not request.user.is_authenticated:
         # print('not logged in')
-        return HttpResponseRedirect('manager_login')
-    message = "Success - You have Logged In"
-    username = get_username(request)
+        # return HttpResponseRedirect('manager_login')
+    message = "Success - You have Reached to the first step"
+    # username = get_username(request)
+    
     context = {
         "title" : "Login",
         "message" : message,
-        "username" : username,
+        # "username" : username,
     }
     return render(request, 'Accounts/step1.html', context)
 
 def step2(request):
-    if not request.user.is_authenticated:
+    # if not request.user.is_authenticated:
         # print('not logged in')
-        return HttpResponseRedirect('manager_login')
-    message = "Success - You Just Completed Step 2"
-    username = get_username(request)
+        # return HttpResponseRedirect('manager_login')
+    message = "Success - You Just Completed Step 1"
+    # username = get_username(request)
     context = {
         "title" : "Login",
         "message" : message,
-        "username" : username,
+        # "username" : username,
     }
     return render(request, 'Accounts/step2.html', context)
     
 def step3(request):
-    if not request.user.is_authenticated:
+    # if not request.user.is_authenticated:
         # print('not logged in')
-        return HttpResponseRedirect('manager_login')
-    message = "Success - Second Step Completed too"
-    username = get_username(request)
+        # return HttpResponseRedirect('manager_login')
+    
+    if request.method == "POST":
+        print('this is a POST Request')
+    else:
+        message = "Success - Second Step Completed too"
     context = {
         "title" : "Login",
         "message" : message,
-        "username" : username,
+        # "username" : username,
     }
     return render(request, 'Accounts/step3.html', context)
